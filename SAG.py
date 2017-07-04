@@ -45,7 +45,7 @@ class SAGModel(object):
         self.edge_dict={}
         self.gamma_t=0.11
         self.rio=0.36
-        self.comment_popularity=[]
+        #self.comment_popularity=[]
 
 
 
@@ -57,7 +57,7 @@ class SAGModel(object):
 
 
     def _initialize_vertice(self,word_2_vec):
-        lines=DataPreProcessing()._proxy_(file_name,POS_tag)
+        lines,self.vocabulary_list=DataPreProcessing()._proxy_(file_name,POS_tag)
         self.N=len(lines)
         for index,line in enumerate(lines):
             v=Vertice()
@@ -103,13 +103,15 @@ class SAGModel(object):
         return S_dict
 
     def _calc_popularity(self):
+        comment_popularity=[]
         S_dict=self._calc_S_size()
         total=1
         for item in S_dict.values():
             total*=item
         _denumberator=np.power(total,1/len(S_dict))
         for vertice in self.vertice_list:
-            self.comment_popularity.append(len(vertice.S)/_denumberator)
+            comment_popularity.append(len(vertice.S)/_denumberator)
+        return np.array(comment_popularity)
 
 
     def _cacl_M_n(self):
@@ -122,25 +124,31 @@ class SAGModel(object):
 
 
     def _calc_I(self):
-        self.I=np.ones(21,self.N)
+        I=np.ones(21,self.N)
         for k in range(1,11):
             for i in range(self.N-1,-1,-1):
                 if i==self.N-1:
-                    self.I[2 * k - 1][i] = self.I[2 * k - 2][i]
+                    I[2 * k - 1][i] = I[2 * k - 2][i]
                 else:
                     total=0
                     for j in range(i+1,self.N):
-                        total+=self.m[i][j]*self.I[2*k-1][j]
-                    self.I[2 * k - 1][i] = self.I[2 * k - 2][i]+total
+                        total+=self.m[i][j]*I[2*k-1][j]
+                    I[2 * k - 1][i] = I[2 * k - 2][i]+total
 
             for i in range(0,self.N):
                 if i==0:
-                    self.I[2*k][i]=self.I[2*k-1][i]/(self.I[2*k-1][i])
+                    I[2*k][i]=I[2*k-1][i]/(I[2*k-1][i])
                 else:
                     total=0
                     for j in range(1,i):
-                        total+=self.m[j][i]*self.I[2*k][j]
-                    self.I[2*k][i]=self.I[2*k-1][i]/(self.I[2*k-1][i]+total)
+                        total+=self.m[j][i]*I[2*k][j]
+                    I[2*k][i]=I[2*k-1][i]/(I[2*k-1][i]+total)
+
+        return I[20]
+
+    def _calc_SW_IDF(self):
+
+
 
 
     def _tag_extraction(self):
@@ -158,31 +166,10 @@ class SAGModel(object):
                 self.vertice_list[edge.y].S=s_all
 
         self._cacl_M_n()
-        self._calc_popularity()
-        self._calc_I()
-
-
-    def
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        P=self._calc_popularity()
+        I=self._calc_I()
+        W=P*I
+        self._calc_SW_IDF()
 
 
 

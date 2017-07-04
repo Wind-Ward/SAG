@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
+import copy
 from ReadBulletScreen import BulletScreen
 from collections import OrderedDict
 try:
@@ -24,8 +25,15 @@ class DataPreProcessing(object):
 
     def _proxy_(self, file_name, POS_tag):
         self.lines, vocabulary = BulletScreen().run(file_name, POS_tag)
+        vocabulary_list=[]
+        _vocabulary=copy.copy(vocabulary)
+        for line in self.lines:
+            for item in line["text"]:
+                if item in _vocabulary:
+                    _vocabulary[item]+=1
+            vocabulary_list.append(_vocabulary.values())
         self.print_raw_comment(self.lines)
-        return self.lines
+        return self.lines,vocabulary_list
 
 
 

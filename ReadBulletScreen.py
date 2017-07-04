@@ -67,6 +67,7 @@ class BulletScreen(object):
                         if item not in vocabulary:
                             vocabulary[item]=0
 
+
         lines=sorted(tempLine, key= lambda e:(e.__getitem__('time')))
         return lines,vocabulary
 
