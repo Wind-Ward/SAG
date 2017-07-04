@@ -45,6 +45,7 @@ class SAGModel(object):
         self.edge_dict={}
         self.gamma_t=0.11
         self.rio=0.36
+        self.tag_number=10
         #self.comment_popularity=[]
 
 
@@ -57,7 +58,8 @@ class SAGModel(object):
 
 
     def _initialize_vertice(self,word_2_vec):
-        lines,self.vocabulary_list=DataPreProcessing()._proxy_(file_name,POS_tag)
+        lines,self.vocabulary_list,self.vocabulary_size,self.vocabulary=DataPreProcessing()._proxy_(file_name,POS_tag)
+
         self.N=len(lines)
         for index,line in enumerate(lines):
             v=Vertice()
@@ -146,10 +148,15 @@ class SAGModel(object):
 
         return I[20]
 
-    def _calc_SW_IDF(self):
-
-
-
+    def _calc_SW_IDF(self,W):
+        result=[]
+        for i in range(0,self.vocabulary_size):
+            sum_w_j=0
+            for j in range(0,self.N):
+                if self.vocabulary_list[j][i]>0:
+                    sum_w_j+=W[j]
+            result.append((np.log(self.N/(1+np.sum(self.vocabulary_list[:][i])))*sum_w_j,i))
+        return result
 
     def _tag_extraction(self):
         self.initialize()
@@ -169,12 +176,14 @@ class SAGModel(object):
         P=self._calc_popularity()
         I=self._calc_I()
         W=P*I
-        self._calc_SW_IDF()
+        result=self._calc_SW_IDF(W)
+        self._display_tag(result)
 
-
-
-
-
+    def _display_tag(self,result):
+        with open("data/result.txt","w") as f:
+            for item in sorted(result,key=lambda x:x[0],reverse=True)[:self.tag_number]:
+                f.write(list(self.vocabulary.keys())[item[1]])
+                f.write("\n")
 
 
 if __name__ == '__main__':
