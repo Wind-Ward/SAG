@@ -31,7 +31,7 @@ class DataPreProcessing(object):
             for item in line["text"]:
                 if item in _vocabulary:
                     _vocabulary[item]=1
-            vocabulary_list.append(_vocabulary.values())
+            vocabulary_list.append(list(_vocabulary.values()))
         self.print_raw_comment(self.lines)
         return self.lines,np.array(vocabulary_list),len(vocabulary),vocabulary
 
