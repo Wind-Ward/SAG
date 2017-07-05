@@ -56,7 +56,7 @@ class SAGModel(object):
         self.rio=0.36
         self.tag_number=20
         #self.comment_popularity=[]
-        self.T=20
+        self.T=50
 
     #check
     def _initialize_vertice(self,word_2_vec):
@@ -177,8 +177,8 @@ class SAGModel(object):
         print("I")
         print(I)
         print("I[20]")
-        print(I[self.T*2])
-        return I[self.T*2]
+        print(I[self.T])
+        return I[self.T]
 
 
     def _calc_SW_IDF(self,W):
