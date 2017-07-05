@@ -61,7 +61,7 @@ class BulletScreen(object):
 
 
                 #提取有效弹幕 有效弹幕为长度>3的弹幕
-                if len(temp["text"])>1:
+                if len(temp["text"])>3:
                     tempLine.append(temp)
                     for item in temp["text"]:
                         if item not in vocabulary:
