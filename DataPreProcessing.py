@@ -53,7 +53,7 @@ class DataPreProcessing(object):
 
 if __name__=="__main__":
 
-    file_name = "data/1_test.xml"
+    file_name = "data/danmu/1.xml"
     POS_tag = ["m", "w", "g", "c", "o", "p", "z", "q", "un", "e", "r", "x", "d", "t", "h", "k", "y", "u", "s", "uj",
                "ul","r", "eng"]
     lines=DataPreProcessing()._proxy_(file_name,POS_tag)

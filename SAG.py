@@ -8,7 +8,7 @@ except ImportError:
 from DataPreProcessing import DataPreProcessing
 from operator import itemgetter, attrgetter
 
-file_name = "data/1_test.xml"
+file_name = "data/danmu/1.xml"
 POS_tag = ["m", "w", "g", "c", "o", "p", "z", "q", "un", "e", "r", "x", "d", "t", "h", "k", "y", "u", "s", "uj",
                "ul","r", "eng"]
 
@@ -16,13 +16,13 @@ def cos_distance(vector1,vector2):
     return np.dot(vector1, vector2) / (np.linalg.norm(vector1) * np.linalg.norm(vector2))
 
 
-def store_word2vec_calc(file="data/raw.txt"):
-    logging.basicConfig(format='%(asctime)s:%(levelname)s: %(message)s', level=logging.INFO)
-    sentences = word2vec.Text8Corpus(file)  # 加载语料
-    model = word2vec.Word2Vec(sentences, size=300,min_count=1)
-    fw = open("data/cache/word2vec_model", "wb")
-    pickle.dump(model, fw)
-    fw.close()
+# def store_word2vec_calc(file="data/raw.txt"):
+#     logging.basicConfig(format='%(asctime)s:%(levelname)s: %(message)s', level=logging.INFO)
+#     sentences = word2vec.Text8Corpus(file)  # 加载语料
+#     model = word2vec.Word2Vec(sentences, size=300,min_count=1)
+#     fw = open("data/cache/word2vec_model", "wb")
+#     pickle.dump(model, fw)
+#     fw.close()
 
 
 def grab_word2vec_calc():
