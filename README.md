@@ -2,7 +2,7 @@
 * SW-IDF(Semantic Weight-Inverse Document Frequency) generates corresponding semantic association graph (SAG) using semantic similarities and timestamps of the time-sync comments to extract videos tags from online video.
 * The original paper is as follow:[***ROWDSOURCED TIME-SYNC VIDEO TAGGING USING SEMANTIC ASSOCIATION GRAPH***](http://csc.sjtu.edu.cn/doc/2017-3.pdf)
 * Alough the idea of paper is novel,the result in my experiment is very poor and it costs too much time to analysis TSCs.
-* Recently,I implement serveral model which was used to extract topic or representative comment from TSCs.No one could work very well in real production environment. 
+* Recently,I implement serveral models which were used to extract topic or representative comment from TSCs.No one could work very well in real production environment. 
 
 ## Dependency
 * python3
