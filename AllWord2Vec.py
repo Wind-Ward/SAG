@@ -10,8 +10,6 @@ except ImportError:
 POS_tag = ["m", "w", "g", "c", "o", "p", "z", "q", "un", "e", "r", "x", "d", "t", "h", "k", "y", "u", "s", "uj",
            "ul", "r", "eng"]
 
-
-
 def print_all_raw(root="data/danmu"):
     with open("data/raw_all.txt","w") as f:
         for i in os.listdir(root):
@@ -31,5 +29,5 @@ def store_word2vec_calc(file="data/raw_all.txt"):
 
 
 if __name__ == '__main__':
-    print_all_raw()
-    #store_word2vec_calc()
+    #print_all_raw()
+    store_word2vec_calc()
