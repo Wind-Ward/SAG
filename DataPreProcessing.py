@@ -26,13 +26,18 @@ class DataPreProcessing(object):
     def _proxy_(self, file_name, POS_tag):
         self.lines, vocabulary = BulletScreen().run(file_name, POS_tag)
         vocabulary_list=[]
-        _vocabulary=copy.copy(vocabulary)
         for line in self.lines:
+            _vocabulary = copy.copy(vocabulary)
             for item in line["text"]:
                 if item in _vocabulary:
-                    _vocabulary[item]=1
+                    _vocabulary[item]+=1
+
             vocabulary_list.append(list(_vocabulary.values()))
         self.print_raw_comment(self.lines)
+
+        print(len(self.lines))
+        print(len(vocabulary))
+
         return self.lines,np.array(vocabulary_list),len(vocabulary),vocabulary
 
 
@@ -50,10 +55,11 @@ class DataPreProcessing(object):
 #         fw.close()
 
 
-
+#file_name = "data/danmu/1.xml"
 if __name__=="__main__":
 
     file_name = "data/danmu/1.xml"
+    #file_name = "data/1_test.xml"
     POS_tag = ["m", "w", "g", "c", "o", "p", "z", "q", "un", "e", "r", "x", "d", "t", "h", "k", "y", "u", "s", "uj",
                "ul","r", "eng"]
     lines=DataPreProcessing()._proxy_(file_name,POS_tag)

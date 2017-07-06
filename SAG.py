@@ -1,14 +1,22 @@
+# -*- coding: utf-8 -*-
+
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 import numpy as np
 from gensim.models import word2vec
 import logging
+import uniout
 try:
     import cPickle as pickle
 except ImportError:
     import pickle
 from DataPreProcessing import DataPreProcessing
 from operator import itemgetter, attrgetter
+from collections import OrderedDict
 
 file_name = "data/danmu/1.xml"
+#file_name = "data/1_test.xml"
 POS_tag = ["m", "w", "g", "c", "o", "p", "z", "q", "un", "e", "r", "x", "d", "t", "h", "k", "y", "u", "s", "uj",
                "ul","r", "eng"]
 
@@ -23,6 +31,17 @@ def cos_distance(vector1,vector2):
 #     fw = open("data/cache/word2vec_model", "wb")
 #     pickle.dump(model, fw)
 #     fw.close()
+
+def store_w(w):
+    fw = open("data/cache/w", "wb")
+    pickle.dump(w, fw)
+    fw.close()
+
+def grab_w():
+    fr = open("data/cache/w", "rb")
+    w = pickle.load(fr)
+    fr.close()
+    return w
 
 
 def grab_word2vec_calc():
@@ -68,7 +87,7 @@ class SAGModel(object):
             v.time,v.index,v.comment =line["time"],index,line["text"][:]
             #calc mean sentence vector by word2vec
             total=np.zeros(300)
-            #print(line["text"])
+
             for item in line["text"]:
                 total+=word_2_vec[item]
             v.sentence_vec=total/len(line["text"])
@@ -90,13 +109,7 @@ class SAGModel(object):
                     self.edge_list.append(e)
                     self.edge_dict[str(i)+","+str(j)]=e
         self.edge_list=sorted(self.edge_list,key=attrgetter('w'),reverse=True)
-        # print("haha")
-        # for item in self.edge_list:
-        #     print(item.w)
-        #     print(item.x)
-        #     print(item.y)
-        # #print(self.edge_list)
-        # print("hehe")
+
 
 
     def initialize(self):
@@ -106,7 +119,7 @@ class SAGModel(object):
 
 
     def _calc_S_size(self):
-        S_dict={}
+        S_dict=OrderedDict()
 
         for vertice in self.vertice_list:
             print("vertice.S")
@@ -117,6 +130,8 @@ class SAGModel(object):
             else:
                 S_dict[_key]=1
         print (S_dict)
+        print("len S_dict")
+        print(len(S_dict))
         return S_dict
 
     def _calc_popularity(self):
@@ -185,13 +200,18 @@ class SAGModel(object):
         result=[]
         for i in range(0,self.vocabulary_size):
             sum_w_j=0
-            #print(self.vocabulary_size)
+
+            count=0
             for j in range(0,self.N):
                 if self.vocabulary_list[j][i]>0:
                     sum_w_j+=W[j]
+                    count+=1
             #print(i)
             #print(self.vocabulary_list.shape)
-            result.append((np.log(self.N/(1+np.sum(self.vocabulary_list[:,i])))*sum_w_j,i))
+            #result.append((np.log(self.N/(1+np.sum(self.vocabulary_list[:,i])))*sum_w_j,i))
+            result.append((np.log(self.N / (1 + count)) * sum_w_j, i))
+        print("result")
+        print(result)
         return result
 
     def _tag_extraction(self):
@@ -201,7 +221,10 @@ class SAGModel(object):
             print(self.vertice_list[edge.x].S)
             print(self.vertice_list[edge.y].S)
             print("hehe")
+
             s_all=list(self.vertice_list[edge.x].S | self.vertice_list[edge.y].S)
+            s1_length=len(self.vertice_list[edge.x].S)
+            s2_length=len(self.vertice_list[edge.y].S)
             #print(s_all)
             total=0.0
             for i,item in enumerate(s_all):
@@ -213,21 +236,31 @@ class SAGModel(object):
                     elif j_i in self.edge_dict:
                         total += self.edge_dict[j_i].w
 
-            if total/(len(s_all)*((len(s_all)-1)/2))>self.rio:
-                self.vertice_list[edge.x].S|=set(s_all)
-                self.vertice_list[edge.y].S|=set(s_all)
+            if total/((s1_length+s2_length)*((s1_length+s2_length)-1)/2)>self.rio:
+                for item in s_all:
+                    self.vertice_list[item].S|=set(s_all)
+                    #self.vertice_list[edge.y].S|=set(s_all)
 
         m=self._cacl_M_n()
         P=self._calc_popularity()
         I=self._calc_I(m)
         W=P*I
+
+        print("W")
+        print(W)
+        print(len(W))
+        print(self.vocabulary.keys())
+
+        #store_w(W)
+        #W=grab_w()
         result=self._calc_SW_IDF(W)
         self._display_tag(result)
 
     def _display_tag(self,result):
         with open("data/result.txt","w") as f:
-            # for item in sorted(result,key=lambda x:x[0],reverse=True)[:self.tag_number]:
-            #print(sorted(result, key=lambda x: x[0], reverse=True))
+            #for item in sorted(result,key=lambda x:x[0],reverse=True)[:self.tag_number]:
+            print("sorted(result, key=lambda x: x[0], reverse=True)")
+            print(sorted(result, key=lambda x: x[0], reverse=True))
             for item in sorted(result, key=lambda x: x[0], reverse=True)[:self.tag_number]:
                 f.write(list(self.vocabulary.keys())[item[1]])
                 f.write("\n")
@@ -235,7 +268,7 @@ class SAGModel(object):
 
 if __name__ == '__main__':
 
-    #store_word2vec_calc()
+
     SAGModel()._tag_extraction()
 
 

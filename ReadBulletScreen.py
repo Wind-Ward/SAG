@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
-
+# import sys
+# reload(sys)
+# sys.setdefaultencoding('utf-8')
 import re
 import jieba
 import jieba.posseg as pseg
 import copy
 
-
+from collections import OrderedDict
 
 class BulletScreen(object):
     def __init__(self):
@@ -15,14 +17,7 @@ class BulletScreen(object):
                     "it","this","then","at","have","all","not","one","has","or","that","什么","一个"
                     ])
 
-    #处理停用词
-    '''
-        *function name : load_stop_words
-        *输入参数:
-        	-file : 停用词表文件
-        *函数功能:
-        	-读取停用词文件，添加停用词
-        '''
+
     def load_stop_words(self,file="data/metadata/stopWords.txt"):
         f = open(file)
         content = f.read()
@@ -32,22 +27,11 @@ class BulletScreen(object):
 
 
 
-    '''
-        *function name : sliceWithTime
-        *输入参数:
-        	-file_name : 要分析的视频的文件名
-        	-POS_tag:用于jieba分词的词性过滤
-        *输出:
-        	-lines:  返回格式：[{'text': [u'伪装', u'着看', u'完', u'僵尸', u'王'], 'lineno': 2729, 'time': 0}, {'text': [u'欢乐颂', u'取', u'汁源', u'诚信', u'发'],'lineno': 5307, 'time': 0},
-        	        每一个弹幕为对一个dict，记录了弹幕所在视频文件中的行号（lineno），在弹幕中出现的时间（time），以及内容（text）
-        	-vocabulary: 返回的一个单词表（用于以后的分析）
-        *函数功能:
-        	-将弹幕文件中的有效弹幕提取出来，提取出的有效弹幕已经排序、分词完毕
-        '''
+
     def read(self,file_name,POS_tag):
         f = open(file_name, "r")
         tempLine=[]
-        vocabulary = {}
+        vocabulary = OrderedDict()
         jieba.load_userdict("data/metadata/user_dict.txt")
         for lineNo,line in enumerate(f.readlines()):
             pattern=re.compile("^<d p=\"(.+)\">(.+)</d>")
@@ -62,6 +46,7 @@ class BulletScreen(object):
 
                 #提取有效弹幕 有效弹幕为长度>3的弹幕
                 if len(temp["text"])>=3:
+                    print(temp["text"])
                     tempLine.append(temp)
                     for item in temp["text"]:
                         if item not in vocabulary:
@@ -69,6 +54,7 @@ class BulletScreen(object):
 
 
         lines=sorted(tempLine, key= lambda e:(e.__getitem__('time')))
+        print(vocabulary)
         return lines,vocabulary
 
     '''
@@ -91,7 +77,7 @@ class BulletScreen(object):
 
 if __name__=="__main__":
     # 所要分析的弹幕文件
-    file_name = "data/1.xml"
+    file_name = "data/danmu/1.xml"
     # 采用词性过滤的方式来过滤对弹幕挖掘没有实际意义的词 具体可查 http://www.cnblogs.com/adienhsuan/p/5674033.html
     POS_tag = ["m", "w", "g", "c", "o", "p", "z", "q", "un", "e", "r", "x", "d", "t", "h", "k", "y", "u", "s", "uj",
                "ul",
