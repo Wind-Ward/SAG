@@ -20,13 +20,7 @@ def cos_distance(vector1,vector2):
     return np.dot(vector1, vector2) / (np.linalg.norm(vector1) * np.linalg.norm(vector2))
 
 
-# def store_word2vec_calc(file="data/raw.txt"):
-#     logging.basicConfig(format='%(asctime)s:%(levelname)s: %(message)s', level=logging.INFO)
-#     sentences = word2vec.Text8Corpus(file)  # 加载语料
-#     model = word2vec.Word2Vec(sentences, size=300,min_count=1)
-#     fw = open("data/cache/word2vec_model", "wb")
-#     pickle.dump(model, fw)
-#     fw.close()
+
 
 def store_w(w):
     fw = open("data/cache/w", "wb")
