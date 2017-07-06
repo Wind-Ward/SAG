@@ -8,6 +8,12 @@
 * gensim
 * jieba
 
+## Run
+```
+python DAtaPreProcessing.py
+python AllWord2Vec.py
+python SAG.py
+```
 ## Caveat
 *This is a school project.If you have any question,please contact me by E-mail!*
 
