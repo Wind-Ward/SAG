@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
 import numpy as np
 from gensim.models import word2vec
 import logging
-import uniout
 try:
     import cPickle as pickle
 except ImportError:
