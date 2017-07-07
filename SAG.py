@@ -62,10 +62,9 @@ class SAGModel(object):
             v.time,v.index,v.comment =line["time"],index,line["text"][:]
             #calc mean sentence vector by word2vec
             total=np.zeros(300)
-
             for item in line["text"]:
-		if item in word_2_vec:
-                	total+=word_2_vec[item]
+                if iten in word_2_vec:
+                    total+=word_2_vec[item]
             v.sentence_vec=total/len(line["text"])
             self.vertice_list.append(v)
         #print(self.vertice_list)
