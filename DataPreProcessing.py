@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 import numpy as np
 import copy
@@ -9,12 +8,6 @@ try:
 except ImportError:
     import pickle
 
-# def grab_slice_number(self):
-#         fr = open("data/var/slice_number", "rb")
-#         slice_number = pickle.load(fr)
-#         fr.close()
-#         return slice_number
-#
 
 class DataPreProcessing(object):
     def __init__(self):
@@ -35,8 +28,8 @@ class DataPreProcessing(object):
             vocabulary_list.append(list(_vocabulary.values()))
         self.print_raw_comment(self.lines)
 
-        print(len(self.lines))
-        print(len(vocabulary))
+        # print(len(self.lines))
+        # print(len(vocabulary))
 
         return self.lines,np.array(vocabulary_list),len(vocabulary),vocabulary
 
@@ -58,7 +51,7 @@ class DataPreProcessing(object):
 #file_name = "data/danmu/1.xml"
 if __name__=="__main__":
 
-    file_name = "data/danmu/1.xml"
+    file_name = "data/danmu/2.xml"
     #file_name = "data/1_test.xml"
     POS_tag = ["m", "w", "g", "c", "o", "p", "z", "q", "un", "e", "r", "x", "d", "t", "h", "k", "y", "u", "s", "uj",
                "ul","r", "eng"]

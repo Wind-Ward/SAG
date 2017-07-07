@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import numpy as np
 from gensim.models import word2vec
 import logging
@@ -11,7 +9,7 @@ from DataPreProcessing import DataPreProcessing
 from operator import itemgetter, attrgetter
 from collections import OrderedDict
 
-file_name = "data/danmu/1.xml"
+file_name = "data/danmu/2.xml"
 #file_name = "data/1_test.xml"
 POS_tag = ["m", "w", "g", "c", "o", "p", "z", "q", "un", "e", "r", "x", "d", "t", "h", "k", "y", "u", "s", "uj",
                "ul","r", "eng"]
@@ -19,19 +17,6 @@ POS_tag = ["m", "w", "g", "c", "o", "p", "z", "q", "un", "e", "r", "x", "d", "t"
 def cos_distance(vector1,vector2):
     return np.dot(vector1, vector2) / (np.linalg.norm(vector1) * np.linalg.norm(vector2))
 
-
-
-
-def store_w(w):
-    fw = open("data/cache/w", "wb")
-    pickle.dump(w, fw)
-    fw.close()
-
-def grab_w():
-    fr = open("data/cache/w", "rb")
-    w = pickle.load(fr)
-    fr.close()
-    return w
 
 
 def grab_word2vec_calc():

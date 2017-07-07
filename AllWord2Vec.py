@@ -30,5 +30,5 @@ def store_word2vec_calc(file="data/raw_all.txt"):
 
 
 if __name__ == '__main__':
-    #print_all_raw()
+    print_all_raw()
     store_word2vec_calc()

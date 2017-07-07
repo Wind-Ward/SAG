@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
-# import sys
-# reload(sys)
-# sys.setdefaultencoding('utf-8')
+
+
 import re
 import jieba
 import jieba.posseg as pseg
@@ -54,7 +52,7 @@ class BulletScreen(object):
 
 
         lines=sorted(tempLine, key= lambda e:(e.__getitem__('time')))
-        print(vocabulary)
+        # print(vocabulary)
         return lines,vocabulary
 
     '''
