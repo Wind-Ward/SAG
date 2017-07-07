@@ -64,7 +64,8 @@ class SAGModel(object):
             total=np.zeros(300)
 
             for item in line["text"]:
-                total+=word_2_vec[item]
+		if item in word_2_vec:
+                	total+=word_2_vec[item]
             v.sentence_vec=total/len(line["text"])
             self.vertice_list.append(v)
         #print(self.vertice_list)
